@@ -45,13 +45,7 @@ function fetchMovies(event) {
 
         searchInput.value = '';
         displayMatches(matches);
-       fetch('http://www.omdbapi.com/?apikey=e65e5d58&t=jurassic park').then(function (responseObj){
-          var dataPromise = responseObj.json();
-
-          dataPromise.then(function(data) {
-            console.log(data);
-          });
-       });
+       
     }
 }
 
