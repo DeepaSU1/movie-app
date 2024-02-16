@@ -20,8 +20,7 @@ body {
     text-align: center;
 }
 
-.row,
-.column {
+.row, .column {
     display: flex;
 }
 
@@ -90,3 +89,12 @@ main .movie-card a {
     text-decoration: none;
     border-bottom: 1px dashed var(--orange);
 }
+
+/*mobile queries*/
+@media (max-width: 768px) {
+    main {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+

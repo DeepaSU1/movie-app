@@ -1,56 +1,61 @@
-var searchInput = document.querySelector('.search');
-var cardWrapper = document.querySelector('main');
+
+// jquery
+var searchInput = $('.search');
+var cardWrapper = $('main');
 
 function noMatch() {
-    cardWrapper.innerHTML = '<p class="no-search">No results found.</p>';
+    cardWrapper.html('<p class="no-search">No results found.</p>');
 }
 
 function displayMatches(matches) {
-    cardWrapper.innerHTML = '';
+    cardWrapper.html('');
 
-    if (!matches.length) {
+    if (!matches) {
         noMatch();
-    }
+    } else {
 
     for (var matchObj of matches) {
 
-        cardWrapper.insertAdjacentHTML('beforeend', `
+        cardWrapper.append(`
      <div class="movie-card" style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
-            url(${matchObj.movie_image});">
-            <h3>${matchObj.title}</h3>
-            <p>${matchObj.description} </p>
-            <a href="${matchObj.imdb_link}" target="_blank">View more info here</a>
+            url(${matchObj.Poster});">
+            <h3>${matchObj.Title}</h3>
+            <p>Release Year : ${matchObj.Year} </p>
+            <a href="https://www.imdb.com/title/${matchObj.imdbID}" target="_blank">View more info here</a>
         </div>`);
 
     }
 
 }
+}
 
+// jquery - fetch is vanilla javascript - remove fetch
 function fetchMovies(event) {
     var keyCode = event.keyCode;
-    var searchText = searchInput.value.toLowerCase().trim();
+    var searchText = searchInput.val().trim();//.toLowerCase() is done at the backend automatically - val() - no argument passed in - gets
 
     if (keyCode === 13 && searchText) {
 
-        var matches = [];
+        // eg 2 arrow function - new version 
+        // fetch(`http://www.omdbapi.com/?apikey=e65e5d58&s=${searchText}`)
+        //     .then(res => res.json())
+        //     .then(data => displayMatches(data.Search));
 
-        for (var movieObj of movieData) {
+        // eg 1 jquery version
+        $.get(`http://www.omdbapi.com/?apikey=e65e5d58&s=${searchText}`)//get is ajax method
+                .then(function(data){
+                displayMatches(data.Search);
+                searchInput.val(''); //val('') -  argument passed in - sets
 
-            //if (movieObj.title.toLowerCase() === searchText) {
-            if (movieObj.title.toLowerCase().includes(searchText)) {
-                matches.push(movieObj);
-            }
+            });
 
-        }
+    };
 
-        searchInput.value = '';
-        displayMatches(matches);
-       
-    }
-}
+};
+
 
 function init() {
-    searchInput.addEventListener('keydown', fetchMovies);
+    searchInput.keydown(fetchMovies);
 }
 
 init();
